@@ -66,6 +66,7 @@ export function UserProvider({ children }: iUserContextProps) {
         return res.data;
       })
       .catch((err) => {
+        console.log(err);
         throw new Error(err);
       });
   }
