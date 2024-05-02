@@ -40,7 +40,7 @@ export default function ModalEdit(task: iTask) {
     const newTask = await editTask(task.id, formTask);
 
     setTasks((allTasks) => {
-      const index = allTasks.indexOf(taskSelected);
+      const index = allTasks.indexOf(task);
       allTasks[index] = newTask;
       return [...allTasks];
     });

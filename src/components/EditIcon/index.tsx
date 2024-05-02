@@ -1,8 +1,8 @@
 interface iEditIcon {
-  onClick: () => void;
+  className: string;
 }
 
-export default function EditIcon({ onClick }: iEditIcon) {
+export default function EditIcon({ className }: iEditIcon) {
   return (
     <div>
       <svg
@@ -11,8 +11,7 @@ export default function EditIcon({ onClick }: iEditIcon) {
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="currentColor"
-        className=" cursor-pointer w-6 h-6"
-        onClick={onClick}
+        className={`${className}`}
       >
         <path
           stroke-linecap="round"

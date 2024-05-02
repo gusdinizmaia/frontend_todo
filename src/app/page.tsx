@@ -8,13 +8,14 @@ import Date from "@/components/Date";
 import Notify from "@/components/Notify";
 import NavBar from "@/components/NavBar";
 import Modal from "@/components/Modal";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "@/providers/userContext";
 import ButtonCreateTask from "@/components/ButtonCreateTask";
 import Filters from "@/components/Filters";
 import ModalEdit from "@/components/ModalEdit";
 import ModalCreate from "@/components/ModalCreate";
 import ModalDelete from "@/components/ModalDelete";
+import { useRouter } from "next/router";
 
 type SearchParamProps = {
   searchParams: Record<string, string> | null | undefined;
@@ -25,6 +26,8 @@ export default function Home({ searchParams }: SearchParamProps) {
   const editTask = searchParams?.editTask;
   const createTask = searchParams?.createTask;
   const deleteTask = searchParams?.deleteTask;
+
+  // useEffect(() => {useRouter().push('/')} ,[])
 
   return (
     <>
@@ -68,7 +71,7 @@ export default function Home({ searchParams }: SearchParamProps) {
           </div>
         </nav>
       </header>
-      <main className="bg-gray-600  w-full flex min-h-screen flex-col md:flex-row items-center gap-10 py-10 px-[8%] md:items-start ">
+      <main className="bg-gray-600  w-full flex min-h-screen flex-col gap-5 md:flex-row items-center gap-x-5 justify-between py-10 px-[8%] md:items-start ">
         <div className="w-full flex flex-col gap-5 md:max-h-[650px]">
           <section className="w-full flex flex-col items-center gap-5 bg-gray-500 rounded-3xl p-6">
             <h2>Filtros</h2>

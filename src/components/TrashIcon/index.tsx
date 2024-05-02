@@ -1,8 +1,8 @@
 interface iTrashIcon {
-  onClick: () => void;
+  className: string;
 }
 
-export default function TrashIcon({ onClick }: iTrashIcon) {
+export default function TrashIcon({ className }: iTrashIcon) {
   return (
     <div>
       <svg
@@ -11,8 +11,7 @@ export default function TrashIcon({ onClick }: iTrashIcon) {
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="currentColor"
-        className=" cursor-pointer w-6 h-6"
-        onClick={onClick}
+        className={`${className}`}
       >
         <path
           stroke-linecap="round"
