@@ -37,10 +37,10 @@ export default function ModalEdit(task: iTask) {
   });
 
   const onSubmit: SubmitHandler<Partial<iFormTask>> = async (formTask) => {
-    const newTask = await editTask(task.id, formTask);
+    const newTask: iTask = await editTask(task.id, formTask);
 
     setTasks((allTasks) => {
-      const index = allTasks.indexOf(task);
+      const index = allTasks.findIndex((elem) => elem.id === task.id);
       allTasks[index] = newTask;
       return [...allTasks];
     });
