@@ -2,7 +2,7 @@
 
 import { UserContext } from "@/providers/userContext";
 import { useContext, useState } from "react";
-import { iTask } from "@/interfaces";
+import { iFormTask, iTask } from "@/interfaces";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,18 +13,12 @@ const schemaFormCreateTask = yup
     title: yup.string().required("É necessário conter um titulo"),
     description: yup.string().required("É necessário conter uma descrição"),
     date: yup.string().required("É necessário fornecer uma data"),
-    duration: yup
-      .number()
-      .positive("Precisa ser um número positivo")
-      .integer("Precisa ser um número inteiro")
-      .required("É necessário uma duração"),
+    duration: yup.string().required("É necessário uma duração"),
   })
   .required();
 
-type iFormTask = Omit<iTask, "status">;
-
 export default function ModalCreate() {
-  const { setTasks } = useContext(UserContext);
+  const { createTask, setTasks } = useContext(UserContext);
 
   const {
     register,
@@ -35,9 +29,10 @@ export default function ModalCreate() {
     resolver: yupResolver(schemaFormCreateTask),
   });
 
-  const addTask: SubmitHandler<iFormTask> = (newTask) => {
-    console.log(newTask);
-    // setTasks((tasks) => [...tasks, newTask]);
+  const addTask: SubmitHandler<iFormTask> = async (task) => {
+    const newTask = await createTask(task);
+
+    setTasks((tasks) => [...tasks, newTask]);
   };
 
   return (
@@ -46,11 +41,7 @@ export default function ModalCreate() {
     justify-start gap-5 z-30 w-full h-full"
     >
       <h1 className="text-4xl text-black mt-8 text-center">Crie sua tarefa</h1>
-      <form
-        onSubmit={handleSubmit(addTask)}
-        className=" flex flex-col w-full gap-6 py-8 items-center"
-        action=""
-      >
+      <form className=" flex flex-col w-full gap-6 py-8 items-center" action="">
         <label htmlFor="" className="text-2xl text-black text-center">
           Titulo
         </label>
@@ -89,11 +80,11 @@ export default function ModalCreate() {
         </p>
 
         <label htmlFor="" className="text-2xl text-black text-center">
-          Duração (minutos)
+          Duração
         </label>
         <input
           className="text-black w-36 py-2 text-center rounded-md border-solid border-2 border-gray-500 h-fit"
-          type="text"
+          type="time"
           {...register("duration")}
         />
         <p className="text-center w-full text-red-400 text-xs">
@@ -101,7 +92,7 @@ export default function ModalCreate() {
         </p>
 
         <div className=" flex gap-4 absolute right-0 bottom-0">
-          <Link href="/">
+          <Link href="/" onClick={handleSubmit(addTask)}>
             <button
               type="submit"
               className="cursor-pointer bg-blue-500 rounded-md px-4 py-2"

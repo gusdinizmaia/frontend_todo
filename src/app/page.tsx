@@ -31,11 +31,12 @@ export default function Home({ searchParams }: SearchParamProps) {
       {editTask && (
         <Modal>
           <ModalEdit
-            title={taskSelected?.title}
-            date={taskSelected?.date}
-            description={taskSelected?.description}
-            duration={taskSelected?.duration}
-            status="pendente"
+            id={taskSelected!.id}
+            title={taskSelected!.title}
+            date={taskSelected!.date}
+            description={taskSelected!.description}
+            duration={taskSelected!.duration}
+            status={taskSelected!.status}
           />
         </Modal>
       )}
@@ -47,11 +48,12 @@ export default function Home({ searchParams }: SearchParamProps) {
       {deleteTask && (
         <Modal>
           <ModalDelete
-            title={taskSelected?.title}
-            date={taskSelected?.date}
-            description={taskSelected?.description}
-            duration={taskSelected?.duration}
-            status="pendente"
+            id={taskSelected!.id}
+            title={taskSelected!.title}
+            date={taskSelected!.date}
+            description={taskSelected!.description}
+            duration={taskSelected!.duration}
+            status={taskSelected!.status}
           />
         </Modal>
       )}

@@ -14,18 +14,14 @@ const schemaFormEditTask = yup
     title: yup.string().required("É necessário conter um titulo"),
     description: yup.string().required("É necessário conter uma descrição"),
     date: yup.string().required("É necessário fornecer uma data"),
-    duration: yup
-      .number()
-      .positive("Precisa ser um número positivo")
-      .integer("Precisa ser um número inteiro")
-      .required("É necessário uma duração"),
+    duration: yup.string().required("É necessário uma duração"),
   })
   .required();
 
 type iFormTask = Omit<iTask, "status">;
 
 export default function ModalEdit(task: iTask) {
-  const { setTasks } = useContext(UserContext);
+  const { setTasks, editTask, taskSelected } = useContext(UserContext);
 
   const searchParams = useSearchParams();
   const modal = searchParams.get("modal");
@@ -40,17 +36,14 @@ export default function ModalEdit(task: iTask) {
     resolver: yupResolver(schemaFormEditTask),
   });
 
-  const addTask: SubmitHandler<iFormTask> = (newTask) => {
-    console.log(newTask);
+  const onSubmit: SubmitHandler<Partial<iFormTask>> = async (formTask) => {
+    const newTask = await editTask(task.id, formTask);
 
-    // setTasks((allTasks) => {
-
-    //   const index = allTasks.indexOf(task)
-
-    //   allTasks[index] = newTask
-
-    //   return [...allTasks]
-    // })
+    setTasks((allTasks) => {
+      const index = allTasks.indexOf(taskSelected);
+      allTasks[index] = newTask;
+      return [...allTasks];
+    });
   };
 
   return (
@@ -60,7 +53,7 @@ export default function ModalEdit(task: iTask) {
     >
       <h1 className="text-4xl text-black mt-8 text-center">Crie sua tarefa</h1>
       <form
-        onSubmit={handleSubmit(addTask)}
+        onSubmit={handleSubmit(onSubmit)}
         className=" flex flex-col w-full gap-6 py-8 items-center"
         action=""
       >
@@ -118,7 +111,7 @@ export default function ModalEdit(task: iTask) {
         </p>
 
         <div className=" flex gap-4 absolute right-0 bottom-0">
-          <Link href="/">
+          <Link href="/" onClick={handleSubmit(onSubmit)}>
             <button
               type="submit"
               className="cursor-pointer bg-blue-500 rounded-md px-4 py-2"

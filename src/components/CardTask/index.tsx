@@ -13,7 +13,10 @@ export default function CardTask(task: iTask) {
   const { setTaskSelected } = useContext(UserContext);
 
   return (
-    <li className="flex justify-between bg-gray-400 w-full h-10 rounded-lg px-2 py-2">
+    <li
+      key={task.id}
+      className="flex justify-between bg-gray-400 w-full h-10 rounded-lg px-2 py-2"
+    >
       <h2 className="">{task.title}</h2>
       <div className="flex gap-2">
         <Link href="/?editTask=true">
