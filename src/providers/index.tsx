@@ -1,5 +1,6 @@
 "use client";
 
+import ManageProvider from "./manageContext";
 import { UserProvider } from "./userContext";
 
 interface iProviders {
@@ -7,5 +8,9 @@ interface iProviders {
 }
 
 export default function Providers({ children }: iProviders) {
-  return <UserProvider>{children}</UserProvider>;
+  return (
+    <ManageProvider>
+      <UserProvider>{children}</UserProvider>
+    </ManageProvider>
+  );
 }
