@@ -2,8 +2,8 @@ import axios from "axios";
 import "dotenv/config";
 
 export const instance = axios.create({
-  baseURL: "https://backend-todo-6pn3.onrender.com/api/",
-  timeout: 14000,
+  baseURL: "http://127.0.0.1:8000/api/",
+  timeout: 30000,
   headers: { "Content-Type": "application/json" },
 });
 

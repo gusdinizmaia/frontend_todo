@@ -7,25 +7,15 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useContext } from "react";
 
 export default function ModalDelete(task: iTask) {
-  const { tasks, setTasks } = useContext(UserContext);
+  const { tasks, setTasks, deleteTask } = useContext(UserContext);
 
   const searchParams = useSearchParams();
   const modal = searchParams.get("modal");
   const pathname = usePathname();
 
-  function removeTask() {
-    // const index = tasks.indexOf(task);
-
-    // tasks.splice(index, 1);
-
-    console.log(task);
-
-    setTasks((allTasks) => {
-      const newTasks = allTasks.filter((elem) => elem.id !== task.id);
-      console.log(newTasks);
-      return [...newTasks];
-    });
-  }
+  const removeTask = async (taskId: number) => {
+    await deleteTask(taskId);
+  };
 
   return (
     <div
@@ -41,7 +31,7 @@ export default function ModalDelete(task: iTask) {
             Cancelar
           </button>
         </Link>
-        <Link href="/" onClick={() => removeTask()}>
+        <Link href="/" onClick={() => removeTask(task.id)}>
           <button className="bg-red-500 rounded-md px-4 py-2">Sim</button>
         </Link>
       </div>

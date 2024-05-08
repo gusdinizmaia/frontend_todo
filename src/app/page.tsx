@@ -1,21 +1,18 @@
 "use client";
 
-import Image from "next/image";
 import Categories from "@/components/Categories";
 import TodayTasks from "@/components/TodayTasks";
 import Search from "@/components/Search";
-import Date from "@/components/Date";
 import Notify from "@/components/Notify";
 import NavBar from "@/components/NavBar";
 import Modal from "@/components/Modal";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { UserContext } from "@/providers/userContext";
 import ButtonCreateTask from "@/components/ButtonCreateTask";
 import Filters from "@/components/Filters";
 import ModalEdit from "@/components/ModalEdit";
 import ModalCreate from "@/components/ModalCreate";
 import ModalDelete from "@/components/ModalDelete";
-import { useRouter } from "next/router";
 
 type SearchParamProps = {
   searchParams: Record<string, string> | null | undefined;

@@ -2,6 +2,7 @@
 
 import { iCategory, iFormTask, iTask } from "@/interfaces";
 import { instance } from "@/services/axios";
+import { all } from "axios";
 import {
   Dispatch,
   SetStateAction,
@@ -23,6 +24,7 @@ interface iUserContext {
   setTaskSelected: Dispatch<SetStateAction<iTask | null>>;
   listTasks: () => Promise<iTask[] | any>;
   createTask: (task: iFormTask) => Promise<iTask | any>;
+  listOneTask: (taskId: number) => Promise<iTask[] | any>;
   editTask: (
     taskId: number,
     taskData: Partial<iFormTask>
@@ -39,6 +41,7 @@ const userContextDefault: iUserContext = {
   setTaskSelected: () => {},
   listTasks: async () => [],
   createTask: async () => null,
+  listOneTask: async () => null,
   editTask: async () => null,
   deleteTask: async () => null,
 };
@@ -55,24 +58,27 @@ export function UserProvider({ children }: iUserContextProps) {
   // const tasks = defaultTasks;
 
   async function listTasks(): Promise<iTask[]> {
-    return await instance
+    const allTasks = await instance
       .get(`tasks`)
       .then((res) => {
         // if (!res.ok) {
         //   throw new Error("Failed to fetch data");
         // }
 
-        setTasks(res.data);
         return res.data;
       })
       .catch((err) => {
         console.log(err);
         throw new Error(err);
       });
+
+    setTasks(allTasks);
+
+    return allTasks;
   }
 
   async function createTask(taskData: iFormTask): Promise<iTask> {
-    return await instance
+    const newTask = await instance
       .post(`tasks`, taskData)
       .then((res) => {
         // if (!res.ok) {
@@ -83,13 +89,38 @@ export function UserProvider({ children }: iUserContextProps) {
       .catch((err) => {
         throw new Error(err);
       });
+
+    setTasks((tasks) => [...tasks, newTask]);
+
+    return newTask;
   }
   async function editTask(
     taskId: number,
     taskData: Partial<iFormTask>
   ): Promise<iTask> {
-    return await instance
+    const newTask = await instance
       .patch(`tasks/${taskId}`, taskData)
+      .then((res) => {
+        // if (!res.ok) {
+        //   throw new Error("Failed to fetch data");
+        // }
+        return res.data;
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+
+    setTasks((allTasks) => {
+      const index = allTasks.findIndex((elem) => elem.id === taskId);
+      allTasks[index] = newTask;
+      return [...allTasks];
+    });
+
+    return newTask;
+  }
+  async function listOneTask(taskId: number): Promise<iTask> {
+    return await instance
+      .get(`tasks/${taskId}`)
       .then((res) => {
         // if (!res.ok) {
         //   throw new Error("Failed to fetch data");
@@ -101,17 +132,26 @@ export function UserProvider({ children }: iUserContextProps) {
       });
   }
   async function deleteTask(taskId: number): Promise<void> {
-    return await instance
+    await instance
       .delete(`tasks/${taskId}`)
       .then((res) => {
         // if (!res.ok) {
         //   throw new Error("Failed to fetch data");
         // }
+
         return res.data;
       })
       .catch((err) => {
         throw new Error(err);
       });
+
+    setTasks((allTasks) => {
+      const newTasks = allTasks.filter((elem) => elem.id !== taskId);
+      console.log(newTasks);
+      return [...newTasks];
+    });
+
+    return;
   }
 
   return (
@@ -124,6 +164,7 @@ export function UserProvider({ children }: iUserContextProps) {
         taskSelected,
         setTaskSelected,
         listTasks,
+        listOneTask,
         createTask,
         editTask,
         deleteTask,

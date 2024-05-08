@@ -18,7 +18,7 @@ const schemaFormCreateTask = yup
   .required();
 
 export default function ModalCreate() {
-  const { createTask, setTasks } = useContext(UserContext);
+  const { createTask } = useContext(UserContext);
 
   const {
     register,
@@ -29,11 +29,8 @@ export default function ModalCreate() {
     resolver: yupResolver(schemaFormCreateTask),
   });
 
-  const addTask: SubmitHandler<iFormTask> = async (task) => {
-    const newTask = await createTask(task);
-
-    setTasks((tasks) => [...tasks, newTask]);
-  };
+  const addTask: SubmitHandler<iFormTask> = async (task) =>
+    await createTask(task);
 
   return (
     <div
